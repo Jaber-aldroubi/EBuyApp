@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "385547646042",
+    "firebase_url": "https://ebuy-b74fc.firebaseio.com",
+    "project_id": "ebuy-b74fc",
+    "storage_bucket": "ebuy-b74fc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:385547646042:android:0b813432ede0b734c19463",
+        "android_client_info": {
+          "package_name": "com.example.ebuy.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "385547646042-r2226t92hefkf37qbn4crgoe39dpf801.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ebuy.debug",
+            "certificate_hash": "742badd8374f056a4f39ac6a32394c457646bdda"
+          }
+        },
+        {
+          "client_id": "385547646042-om17uipvktdf24vl5ep8auhe1fkll8ge.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5J5_5kRWd7Yk29ZxuSDyM-1dIdHVJvdk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "385547646042-om17uipvktdf24vl5ep8auhe1fkll8ge.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
