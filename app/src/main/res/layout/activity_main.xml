@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/tool_bar"
         android:layout_width="match_parent"
@@ -24,7 +23,6 @@
             android:onClick="openScanner"
             android:text="scan"
             app:layout_constraintBottom_toBottomOf="@+id/tool_bar"
-            android:layout_marginEnd=""
             app:layout_constraintTop_toTopOf="@+id/tool_bar" />
 
     </androidx.appcompat.widget.Toolbar>
@@ -55,7 +53,5 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/product_recycler_view" />
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
