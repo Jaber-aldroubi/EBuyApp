@@ -1,5 +1,6 @@
 package com.example.ebuy;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -10,10 +11,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Long> mUpc = new ArrayList<>();
     private ArrayList<String> mBrand = new ArrayList<>();
     private ArrayList<Double> mPrice = new ArrayList<>();
+    private TextView totalAmount;
     private static final String TAG = "debugging";
 
     @Override
@@ -38,10 +43,24 @@ public class MainActivity extends AppCompatActivity {
         iApi = ApiClient.getClient().create(IApi.class);
         setContentView(R.layout.activity_main);
 
-    /*    Toolbar myToolbar = findViewById(R.id.tool_bar);
-        setSupportActionBar(myToolbar);*/
-
         recyclerView = findViewById(R.id.product_recycler_view);
+        totalAmount = findViewById(R.id.total_amount_textview);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.scan_icon) {
+            openScanner(new View(this));
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void openScanner(View view) {
@@ -57,8 +76,6 @@ public class MainActivity extends AppCompatActivity {
 
             if (resultCode == RESULT_OK) {
                 long upc = data.getLongExtra("upc", 0);
-                Log.e(TAG, "onActivityResult:  Result is ok and upc is " + upc);
-
                 getProduct(upc);
 //                addProductToRecyclerView(product);
             }
@@ -83,10 +100,10 @@ public class MainActivity extends AppCompatActivity {
         productCall.enqueue(new Callback<Product>() {
             @Override
             public void onResponse(Call<Product> call, @Nullable Response<Product> answer) {
-                Log.e(TAG, "onResponse: " + answer );
                 if (answer.body() != null) {
                     Log.e(TAG, "onResponse: product is " + answer.body());
                     addProductToRecyclerView(answer.body());
+                    totalAmount.setText(String.format(Locale.GERMANY, "%.2f", getTotalAmount() ));
                 } else {
                     Toast.makeText(MainActivity.this, "no product was found!", Toast.LENGTH_LONG).show();
                 }
@@ -94,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Product> call, Throwable t) {
-                Toast.makeText(MainActivity.this, t.getMessage(),Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -102,15 +119,18 @@ public class MainActivity extends AppCompatActivity {
         return new Product();
     }
 
+    private double getTotalAmount() {
+        double sum = 0;
+        for (Double pPrice : mPrice) {
+            sum += pPrice;
+        }
+        return sum;
+    }
+
 
     public void generateQRCode(View view) {
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-         getMenuInflater().inflate(R.menu.main_menu,menu);
-        return true;
-    }
+
 }

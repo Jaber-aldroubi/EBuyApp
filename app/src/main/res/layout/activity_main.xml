@@ -4,59 +4,59 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     tools:context=".MainActivity">
-
-
-  <!--  <androidx.appcompat.widget.Toolbar
-        android:id="@+id/tool_bar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
-
-
-    </androidx.appcompat.widget.Toolbar>
-
--->
-
-  <Button
-      android:id="@+id/scan_button"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:onClick="openScanner"
-      android:text="scan"
-      app:layout_constraintBottom_toTopOf="@+id/product_recycler_view"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintVertical_bias="0.924" />
 
   <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/product_recycler_view"
-      android:layout_width="411dp"
-      android:layout_height="502dp"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
       android:layout_alignParentBottom="true"
-
       app:layout_constraintBottom_toTopOf="@+id/pay_button"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="1.0"
+      app:layout_constraintHorizontal_bias="0.0"
       app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_bias="0.0" />
 
-      />
+  <Button
+      android:id="@+id/pay_button"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="8dp"
+      android:layout_marginBottom="8dp"
+      android:onClick="generateQRCode"
+      android:text="zur Kasse"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/pay_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="generateQRCode"
-        android:text="Ready to pay"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+  <TextView
+      android:id="@+id/textView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:layout_marginEnd="8dp"
+      android:layout_marginBottom="8dp"
+      android:text="Gesamtbetrag: "
+      android:textColor="#606060"
+      android:textSize="22sp"
+      app:layout_constraintBottom_toBottomOf="@+id/pay_button"
+      app:layout_constraintEnd_toStartOf="@+id/total_amount_textview"
+      app:layout_constraintTop_toTopOf="@+id/pay_button" />
+
+
+  <TextView
+      android:id="@+id/total_amount_textview"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+
+      android:layout_marginEnd="8dp"
+      android:layout_marginBottom="8dp"
+      android:text="0,00 €"
+      android:textColor="#000"
+      android:textSize="24sp"
+      app:layout_constraintBottom_toBottomOf="@+id/textView"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/textView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

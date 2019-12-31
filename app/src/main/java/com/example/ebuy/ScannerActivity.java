@@ -24,18 +24,14 @@ import retrofit2.Response;
 
 public class ScannerActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
 
-    IApi apiInterface;
     private ZXingScannerView scannerView;
-    public static String TAG = "debugging";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanner);
 
-        apiInterface = ApiClient.getClient().create(IApi.class);
         scannerView = findViewById(R.id.zxScan);
-
 
         Dexter.withActivity(this)
                 .withPermission(Manifest.permission.CAMERA)
@@ -74,25 +70,15 @@ public class ScannerActivity extends AppCompatActivity implements ZXingScannerVi
 
     @Override
     public void handleResult(Result rawResult) {
-        Log.e(TAG, "handleResult: Opening Handle result");
-
-        Intent intent = getIntent();
-        ;
-
         String upcString = rawResult.getText();
         long upc = Long.parseLong(upcString);
-        Log.e(TAG, "handleResult: upc " + upc);
         SendUpc(upc);
-        finish();
     }
 
     private void SendUpc(long upc) {
-        Log.e(TAG, "GetProduct: getting Product");
-
         Intent reIntent = new Intent();
         reIntent.putExtra("upc", upc);
         setResult(RESULT_OK, reIntent);
         finish();
-
     }
 }
