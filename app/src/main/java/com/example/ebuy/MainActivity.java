@@ -2,12 +2,14 @@ package com.example.ebuy;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
 
@@ -34,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         iApi = ApiClient.getClient().create(IApi.class);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(myToolbar);
 
         setContentView(R.layout.activity_main);
         recyclerView = findViewById(R.id.product_recycler_view);
@@ -102,5 +106,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 }
