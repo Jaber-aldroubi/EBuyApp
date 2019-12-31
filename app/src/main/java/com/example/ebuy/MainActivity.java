@@ -36,10 +36,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         iApi = ApiClient.getClient().create(IApi.class);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.tool_bar);
-        setSupportActionBar(myToolbar);
-
         setContentView(R.layout.activity_main);
+
+    /*    Toolbar myToolbar = findViewById(R.id.tool_bar);
+        setSupportActionBar(myToolbar);*/
+
         recyclerView = findViewById(R.id.product_recycler_view);
     }
 
@@ -108,7 +109,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return super.onCreateOptionsMenu(menu);
+        super.onCreateOptionsMenu(menu);
+         getMenuInflater().inflate(R.menu.main_menu,menu);
+        return true;
     }
 }
