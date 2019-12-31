@@ -9,17 +9,19 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/tool_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:padding="16dp"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="16dp">
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
         <Button
             android:id="@+id/scan_button"
             style="@style/Widget.AppCompat.Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:icon="@drawable/barcode_scanner_icon"
             android:onClick="openScanner"
             android:text="scan"
             app:layout_constraintBottom_toBottomOf="@+id/tool_bar"
@@ -53,6 +55,5 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/product_recycler_view" />
-// not everything is uptodate
-    //shut up
+
 </androidx.constraintlayout.widget.ConstraintLayout>
