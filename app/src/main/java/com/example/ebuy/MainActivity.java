@@ -31,10 +31,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int RequestCode = 1;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
-    private ArrayList<String> mDescription = new ArrayList<>();
-    private ArrayList<Long> mUpc = new ArrayList<>();
-    private ArrayList<String> mBrand = new ArrayList<>();
-    private ArrayList<Double> mPrice = new ArrayList<>();
     private ArrayList<Product> mProduct = new ArrayList<>();
     private TextView totalAmount;
     private static final String TAG = "debugging";
@@ -90,12 +86,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void addProductToRecyclerView(Product product) {
 
-        mDescription.add(product.getProductDescription());
-        mUpc.add(product.getId());
-        mBrand.add(product.getBrand());
-        mPrice.add(product.getPrice());
+        mProduct.add(product);
 
-        adapter = new ProductRecyclerViewAdapter(this, mDescription, mBrand, mPrice);
+        adapter = new ProductRecyclerViewAdapter(this, mProduct);
         new ItemTouchHelper(swipeToDelete).attachToRecyclerView(recyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -114,14 +107,10 @@ public class MainActivity extends AppCompatActivity {
 
             new AlertDialog.Builder(MainActivity.this)
                     .setTitle("Delete Product")
-                    .setMessage("Are you really sure you want to delete " + mBrand.get(viewHolder.getAdapterPosition()) + " from your shopping list?")
-                    
-                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                    .setMessage("Are you really sure you want to delete " + mProduct.get(viewHolder.getAdapterPosition()).getBrand() + " from your shopping list?")
 
-                        mDescription.remove(viewHolder.getAdapterPosition());
-                        mPrice.remove(viewHolder.getAdapterPosition());
-                        mBrand.remove(viewHolder.getAdapterPosition());
-                        mUpc.remove(viewHolder.getAdapterPosition());
+                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                        mProduct.remove(viewHolder.getAdapterPosition());
                         totalAmount.setText(getTotalAmount());
                         adapter.notifyDataSetChanged();
                     })
@@ -129,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
                     .setNegativeButton(android.R.string.no, (dialog, which) -> recyclerView.setAdapter(adapter))
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
-
 
         }
     };
@@ -162,8 +150,8 @@ public class MainActivity extends AppCompatActivity {
 
     private String getTotalAmount() {
         double sum = 0;
-        for (Double pPrice : mPrice) {
-            sum += pPrice;
+        for (Product product : mProduct) {
+            sum += product.getPrice();
         }
         return String.format(Locale.GERMANY, "%.2f", sum) + " €";
     }
