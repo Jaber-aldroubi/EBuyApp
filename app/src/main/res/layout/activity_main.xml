@@ -13,6 +13,7 @@
       android:layout_alignParentBottom="true"
       app:layout_constraintBottom_toTopOf="@+id/pay_button"
       app:layout_constraintEnd_toEndOf="parent"
+      android:padding="8dp"
       app:layout_constraintHorizontal_bias="0.0"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"

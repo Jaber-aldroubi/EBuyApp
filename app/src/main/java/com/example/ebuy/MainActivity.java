@@ -3,7 +3,6 @@ package com.example.ebuy;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -76,8 +75,10 @@ public class MainActivity extends AppCompatActivity {
 
             if (resultCode == RESULT_OK) {
                 long upc = data.getLongExtra("upc", 0);
+// here we should get the product using upc then pass it to recycler view to show it
                 getProduct(upc);
 //                addProductToRecyclerView(product);
+
             }
         }
     }
@@ -103,7 +104,8 @@ public class MainActivity extends AppCompatActivity {
                 if (answer.body() != null) {
                     Log.e(TAG, "onResponse: product is " + answer.body());
                     addProductToRecyclerView(answer.body());
-                    totalAmount.setText(String.format(Locale.GERMANY, "%.2f", getTotalAmount() ));
+                    totalAmount.setText(getTotalAmount());
+
                 } else {
                     Toast.makeText(MainActivity.this, "no product was found!", Toast.LENGTH_LONG).show();
                 }
@@ -119,12 +121,12 @@ public class MainActivity extends AppCompatActivity {
         return new Product();
     }
 
-    private double getTotalAmount() {
+    private String getTotalAmount() {
         double sum = 0;
         for (Double pPrice : mPrice) {
             sum += pPrice;
         }
-        return sum;
+        return String.format(Locale.GERMANY, "%.2f", sum) +" €";
     }
 
 
