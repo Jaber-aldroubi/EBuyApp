@@ -55,7 +55,7 @@
         android:hint="Description string test"
         android:singleLine="true"
         android:textColor="#000"
-        android:textSize="16sp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/price_textview"
         app:layout_constraintHorizontal_bias="0.0"
