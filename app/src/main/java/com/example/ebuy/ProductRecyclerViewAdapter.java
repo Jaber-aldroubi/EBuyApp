@@ -15,17 +15,23 @@ import java.util.Locale;
 
 public class ProductRecyclerViewAdapter extends RecyclerView.Adapter<ProductRecyclerViewAdapter.ProductRecyclerViewHolder> {
 
+    private ArrayList<Product> mProducts;
     private ArrayList<String> mBrands;
     private ArrayList<Double> mPrices;
     private ArrayList<String> mDescriptions;
     private Context context;
 
 
-    public ProductRecyclerViewAdapter(Context context, ArrayList<String> mDescriptions, ArrayList<String> mBrands, ArrayList<Double> mPrices) {
-        this.context = context;
-        this.mDescriptions = mDescriptions;
-        this.mBrands = mBrands;
-        this.mPrices = mPrices;
+//    public ProductRecyclerViewAdapter(Context context, ArrayList<String> mDescriptions, ArrayList<String> mBrands, ArrayList<Double> mPrices) {
+//        this.context = context;
+//        this.mDescriptions = mDescriptions;
+//        this.mBrands = mBrands;
+//        this.mPrices = mPrices;
+//    }
+
+    public ProductRecyclerViewAdapter(Context context, ArrayList<Product> mProducts){
+        this.context=context;
+        this.mProducts=mProducts;
     }
 
     @NonNull
@@ -37,14 +43,14 @@ public class ProductRecyclerViewAdapter extends RecyclerView.Adapter<ProductRecy
 
     @Override
     public void onBindViewHolder(@NonNull ProductRecyclerViewHolder holder, int position) {
-        holder.Description.setText(mDescriptions.get(position));
-        holder.Brand.setText(mBrands.get(position));
-        holder.Price.setText(String.format(Locale.GERMANY,"%.2f", mPrices.get(position))+"€" );
+        holder.Description.setText(mProducts.get(position).getProductDescription());
+        holder.Brand.setText(mProducts.get(position).getBrand());
+        holder.Price.setText(String.format(Locale.GERMANY,"%.2f", mProducts.get(position).getPrice())+"€" );
     }
 
     @Override
     public int getItemCount() {
-        return mDescriptions.size();
+        return mProducts.size();
     }
 
     public static class ProductRecyclerViewHolder extends RecyclerView.ViewHolder {

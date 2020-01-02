@@ -2,10 +2,13 @@ package com.example.ebuy;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,10 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int RequestCode = 1;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
-    private ArrayList<String> mDescription = new ArrayList<>();
-    private ArrayList<Long> mUpc = new ArrayList<>();
-    private ArrayList<String> mBrand = new ArrayList<>();
-    private ArrayList<Double> mPrice = new ArrayList<>();
+    private ArrayList<Product> mProduct = new ArrayList<>();
     private TextView totalAmount;
     private static final String TAG = "debugging";
 
@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         recyclerView = findViewById(R.id.product_recycler_view);
+
         totalAmount = findViewById(R.id.total_amount_textview);
     }
 
@@ -85,15 +86,41 @@ public class MainActivity extends AppCompatActivity {
 
     private void addProductToRecyclerView(Product product) {
 
-        mDescription.add(product.getProductDescription());
-        mUpc.add(product.getId());
-        mBrand.add(product.getBrand());
-        mPrice.add(product.getPrice());
+        mProduct.add(product);
 
-        adapter = new ProductRecyclerViewAdapter(this, mDescription, mBrand, mPrice);
+        adapter = new ProductRecyclerViewAdapter(this, mProduct);
+        new ItemTouchHelper(swipeToDelete).attachToRecyclerView(recyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
+
+
+    ItemTouchHelper.SimpleCallback swipeToDelete = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("Delete Product")
+                    .setMessage("Are you really sure you want to delete " + mProduct.get(viewHolder.getAdapterPosition()).getBrand() + " from your shopping list?")
+
+                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                        mProduct.remove(viewHolder.getAdapterPosition());
+                        totalAmount.setText(getTotalAmount());
+                        adapter.notifyDataSetChanged();
+                    })
+
+                    .setNegativeButton(android.R.string.no, (dialog, which) -> recyclerView.setAdapter(adapter))
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+
+        }
+    };
 
     private Product getProduct(long upc) {
 
@@ -123,10 +150,10 @@ public class MainActivity extends AppCompatActivity {
 
     private String getTotalAmount() {
         double sum = 0;
-        for (Double pPrice : mPrice) {
-            sum += pPrice;
+        for (Product product : mProduct) {
+            sum += product.getPrice();
         }
-        return String.format(Locale.GERMANY, "%.2f", sum) +" €";
+        return String.format(Locale.GERMANY, "%.2f", sum) + " €";
     }
 
 
