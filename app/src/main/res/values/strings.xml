@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Easy Buy</string>
+    <string name="base_api_url">https://ebuy202001.azurewebsites.net/</string>
 </resources>

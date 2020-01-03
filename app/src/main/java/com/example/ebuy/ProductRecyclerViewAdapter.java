@@ -16,18 +16,7 @@ import java.util.Locale;
 public class ProductRecyclerViewAdapter extends RecyclerView.Adapter<ProductRecyclerViewAdapter.ProductRecyclerViewHolder> {
 
     private ArrayList<Product> mProducts;
-    private ArrayList<String> mBrands;
-    private ArrayList<Double> mPrices;
-    private ArrayList<String> mDescriptions;
     private Context context;
-
-
-//    public ProductRecyclerViewAdapter(Context context, ArrayList<String> mDescriptions, ArrayList<String> mBrands, ArrayList<Double> mPrices) {
-//        this.context = context;
-//        this.mDescriptions = mDescriptions;
-//        this.mBrands = mBrands;
-//        this.mPrices = mPrices;
-//    }
 
     public ProductRecyclerViewAdapter(Context context, ArrayList<Product> mProducts){
         this.context=context;

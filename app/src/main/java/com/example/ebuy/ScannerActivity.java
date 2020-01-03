@@ -18,21 +18,19 @@ import com.karumi.dexter.listener.single.PermissionListener;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 public class ScannerActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
 
     private ZXingScannerView scannerView;
+    private static final String TAG = "Debugging";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate: camera is opened");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanner);
 
         scannerView = findViewById(R.id.zxScan);
-
+        Log.d(TAG, "onCreate: scanner is found");
         Dexter.withActivity(this)
                 .withPermission(Manifest.permission.CAMERA)
                 .withListener(new PermissionListener() {
@@ -59,26 +57,29 @@ public class ScannerActivity extends AppCompatActivity implements ZXingScannerVi
     public void onDestroy() {
         super.onDestroy();
         scannerView.stopCamera();
+        Log.d(TAG, "onDestroy: Camera is destroied");
     }
 
     @Override
     public void onResume() {
         super.onResume();
         scannerView.setResultHandler(this);
-        scannerView.startCamera();
+       // scannerView.startCamera();
     }
 
     @Override
     public void handleResult(Result rawResult) {
+        Log.d(TAG, "handleResult: rawResult " + rawResult);
         String upcString = rawResult.getText();
+        Log.e(TAG, "handleResult: "+ upcString );
         long upc = Long.parseLong(upcString);
         SendUpc(upc);
     }
 
     private void SendUpc(long upc) {
-        Intent reIntent = new Intent();
-        reIntent.putExtra("upc", upc);
-        setResult(RESULT_OK, reIntent);
+        Intent intent = new Intent();
+        intent.putExtra("upc", upc);
+        setResult(RESULT_OK, intent);
         finish();
     }
 }
