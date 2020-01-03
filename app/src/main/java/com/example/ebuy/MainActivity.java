@@ -9,14 +9,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -32,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private ArrayList<Product> mProduct = new ArrayList<>();
+    private ArrayList<Long> mUpc = new ArrayList<>();
+
     private TextView totalAmount;
     private static final String TAG = "debugging";
 
@@ -64,41 +70,38 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openScanner(View view) {
-        Intent intent = new Intent(this, ScannerActivity.class);
-        new IntentIntegrator(this).initiateScan();
-        startActivityForResult(intent, RequestCode);
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setOrientationLocked(false);
+        integrator.initiateScan();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == RequestCode) {
-
-            if (resultCode == RESULT_OK) {
-                long upc = data.getLongExtra("upc", 0);
-
-                getProduct(upc, product ->
-                        {
-                            if (product != null) {
-                                addProductToRecyclerView(product);
-                                totalAmount.setText(getTotalAmount());
-                            } else {
-                                Toast.makeText(MainActivity.this, "no product was found!", Toast.LENGTH_LONG).show();
-                            }
-                        }
-                );
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            if (result.getContents() != null) {
+                long upc = Long.parseLong(result.getContents());
+                getProduct(upc, product -> {
+                    if (product != null) {
+                        addProductToRecyclerView(product);
+                        totalAmount.setText(getTotalAmount());
+                    } else
+                        Toast.makeText(MainActivity.this, "no product was found!", Toast.LENGTH_LONG).show();
+                });
             }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
-    private void getProduct(long upc, SomeInterface callback) {
+    private void getProduct(long upc, onGetProduct callback) {
 
         Call<Product> productCall = iApi.getProduct(upc);
         productCall.enqueue(new Callback<Product>() {
             @Override
             public void onResponse(Call<Product> call, @Nullable Response<Product> response) {
-                callback.onGetProduct(response.body());
+                Product product = response.body();
+                callback.getProduct(product);
             }
 
             @Override
@@ -109,16 +112,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addProductToRecyclerView(Product product) {
-
-
+        mUpc.add(product.getId());
+        mProduct.add(product);
         adapter = new ProductRecyclerViewAdapter(this, mProduct);
         new ItemTouchHelper(swipeToDelete).attachToRecyclerView(recyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    interface SomeInterface {
-        void onGetProduct(Product product);
+    interface onGetProduct {
+        void getProduct(Product product);
     }
 
     ItemTouchHelper.SimpleCallback swipeToDelete = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
@@ -144,7 +147,6 @@ public class MainActivity extends AppCompatActivity {
                     .setNegativeButton(android.R.string.no, (dialog, which) -> recyclerView.setAdapter(adapter))
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
-
         }
     };
 
@@ -157,6 +159,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void generateQRCode(View view) {
+        Log.d(TAG, "generateQRCode:" +  mUpc.toString());
+        if (mUpc == null || mUpc.size() == 0) {
+            Toast.makeText(this, "no product in the list!!", Toast.LENGTH_LONG).show();
+            return;
+        }
+        Intent intent = new Intent(this, QRCodeGenerator.class);
+
+        intent.putExtra("UPC_LIST", mUpc.toString());
+
+        startActivity(intent);
 
     }
 }

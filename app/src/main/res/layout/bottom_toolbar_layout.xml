@@ -13,11 +13,11 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryLight"
         android:drawableEnd="@drawable/ic_payment_black_24dp"
-        app:cornerRadius="90dp"
+        android:onClick="generateQRCode"
         android:padding="5dp"
         android:text="payment"
 
-        />
+        app:cornerRadius="90dp" />
 
     <TextView
         android:id="@+id/total_amount_textview"
