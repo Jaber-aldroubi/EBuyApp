@@ -8,6 +8,8 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 
+import com.example.ebuy.Model.Product;
+
 import java.util.List;
 
 @Dao

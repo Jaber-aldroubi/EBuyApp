@@ -1,6 +1,4 @@
-package com.example.ebuy;
-
-import android.content.res.Resources;
+package com.example.ebuy.Repository;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

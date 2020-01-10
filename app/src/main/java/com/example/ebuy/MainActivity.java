@@ -9,16 +9,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ebuy.Model.Product;
+import com.example.ebuy.Repository.ApiClient;
+import com.example.ebuy.Repository.IApi;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -29,7 +32,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ProductRecyclerViewAdapter.OnProductListener {
 
     IApi iApi;
     private static final int RequestCode = 1;
@@ -37,7 +40,8 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.Adapter adapter;
     private ArrayList<Product> mProduct = new ArrayList<>();
     private ArrayList<Long> mUpc = new ArrayList<>();
-
+    private TextView productCounter;
+    private LinearLayout details;
     private TextView totalAmount;
     private static final String TAG = "debugging";
 
@@ -48,9 +52,16 @@ public class MainActivity extends AppCompatActivity {
         iApi = ApiClient.getClient().create(IApi.class);
         setContentView(R.layout.activity_main);
 
-        recyclerView = findViewById(R.id.product_recycler_view);
+        findViewById(R.id.floating_action_button).setOnClickListener(v -> {
+            IntentIntegrator integrator = new IntentIntegrator(MainActivity.this);
+            integrator.setOrientationLocked(false);
+            integrator.initiateScan();
 
+        });
+
+        recyclerView = findViewById(R.id.product_recycler_view);
         totalAmount = findViewById(R.id.total_amount_textview);
+
     }
 
     @Override
@@ -60,20 +71,17 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.scan_icon) {
-            openScanner(new View(this));
-        }
-        return super.onOptionsItemSelected(item);
-    }
+// adding actions to button in actionbar
 
-    public void openScanner(View view) {
-        IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.setOrientationLocked(false);
-        integrator.initiateScan();
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        int id = item.getItemId();
+//        if (id == R.id.scan_icon) {
+//            openScanner(new View(this));
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -112,12 +120,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addProductToRecyclerView(Product product) {
+
         mUpc.add(product.getId());
         mProduct.add(product);
-        adapter = new ProductRecyclerViewAdapter(this, mProduct);
+        adapter = new ProductRecyclerViewAdapter( mProduct,this);
         new ItemTouchHelper(swipeToDelete).attachToRecyclerView(recyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    @Override
+    public void onProductClick(int position) {
+
     }
 
     interface onGetProduct {
@@ -132,7 +146,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-
 
             new AlertDialog.Builder(MainActivity.this)
                     .setTitle("Delete Product")
@@ -159,16 +172,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void generateQRCode(View view) {
-        Log.d(TAG, "generateQRCode:" +  mUpc.toString());
         if (mUpc == null || mUpc.size() == 0) {
             Toast.makeText(this, "no product in the list!!", Toast.LENGTH_LONG).show();
             return;
         }
         Intent intent = new Intent(this, QRCodeGenerator.class);
-
         intent.putExtra("UPC_LIST", mUpc.toString());
-
         startActivity(intent);
-
     }
 }
