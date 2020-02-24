@@ -1,26 +1,26 @@
-package com.example.ebuy;
+package com.example.ebuy.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Product implements Parcelable {
+public class Product {
 
     private long upc;
-
     private String productDescription;
-
     private String category;
-
     private double price;
     private String brand;
 
-    public Product(long upc, String productDescription, String category, double price, String brand) {
+
+    private int productCounter;
+
+    public Product(long upc, String productDescription, String category, double price, String brand, int productCounter) {
         this.upc = upc;
         this.productDescription = productDescription;
         this.category = category;
         this.price = price;
         this.brand = brand;
-    }
+        this.productCounter = productCounter;    }
 
     public Product() {
     }
@@ -32,18 +32,6 @@ public class Product implements Parcelable {
         price = in.readDouble();
         brand = in.readString();
     }
-
-    public static final Creator<Product> CREATOR = new Creator<Product>() {
-        @Override
-        public Product createFromParcel(Parcel in) {
-            return new Product(in);
-        }
-
-        @Override
-        public Product[] newArray(int size) {
-            return new Product[size];
-        }
-    };
 
     public long getId() {
         return upc;
@@ -85,6 +73,15 @@ public class Product implements Parcelable {
         this.brand = brand;
     }
 
+    public int getProductCounter() {
+        return productCounter;
+    }
+
+    public void setProductCounter(int productCounter) {
+        this.productCounter = productCounter;
+    }
+
+
     @Override
     public String toString() {
         return "Product{" +
@@ -95,18 +92,5 @@ public class Product implements Parcelable {
                 ", brand='" + brand + '\'' +
                 '}';
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(upc);
-        dest.writeString(productDescription);
-        dest.writeString(category);
-        dest.writeDouble(price);
-        dest.writeString(brand);
-    }
+    
 }

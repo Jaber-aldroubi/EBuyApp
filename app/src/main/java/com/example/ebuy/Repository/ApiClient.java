@@ -1,10 +1,11 @@
-package com.example.ebuy;
+package com.example.ebuy.Repository;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
-    private static final String BASE_URL = "https://ebuyapi20191228060209.azurewebsites.net/";
+
+    private static final String BASE_URL =  "https://ebuy202001.azurewebsites.net/";
     private static Retrofit retrofit = null;
 
     public static Retrofit getClient() {

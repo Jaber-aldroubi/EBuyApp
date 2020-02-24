@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/scan_icon"
-        android:icon="@drawable/ic_barcode_scanner"
+<!--    <item android:id="@+id/scan_icon"-->
+<!--        android:icon="@drawable/ic_barcode_scanner"-->
 
-        app:showAsAction="always"
-        android:title="scan" />
+<!--        app:showAsAction="always"-->
+<!--        android:title="scan" />-->
 </menu>

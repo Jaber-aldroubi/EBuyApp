@@ -1,15 +1,12 @@
-package com.example.ebuy;
+package com.example.ebuy.Repository;
 
-import java.util.List;
+import com.example.ebuy.Model.Product;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 public interface IApi {
-
-    @GET("/api/Products")
-    Call<List<Product>> getAllProducts();
 
     @GET("/api/Products/{upc}")
     Call<Product> getProduct(@Path("upc") long upc);

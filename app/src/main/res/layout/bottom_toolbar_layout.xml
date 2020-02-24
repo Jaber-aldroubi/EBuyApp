@@ -13,19 +13,28 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryLight"
         android:drawableEnd="@drawable/ic_payment_black_24dp"
-        app:cornerRadius="90dp"
+        android:onClick="generateQRCode"
         android:padding="5dp"
-        android:text="payment"
-
-        />
-
+        android:text="payment" />
     <TextView
         android:id="@+id/total_amount_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
         android:text="0,00 €"
         android:textColor="#FFF"
         android:textSize="24sp"
         android:layout_gravity="end"/>
+
+    <TextView
+        android:id="@+id/gesamt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gesamt:"
+        android:textColor="#FFF"
+        android:textSize="24sp"
+        android:layout_gravity="end"/>
+
+
 
 </androidx.appcompat.widget.Toolbar>
